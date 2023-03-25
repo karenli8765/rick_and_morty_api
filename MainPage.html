@@ -12,7 +12,7 @@
 
 <script>
 var locations = null;
-var characters = null;
+var residents = null;
 
 function loadFunction() {
   fetch('https://rickandmortyapi.com/api/location/')
@@ -46,8 +46,6 @@ function loadFunction() {
 function locationLoaded() {
   console.log("location loaded");
   console.log(locations);
-  
-  let location_types = []
 
   var select_location = document.getElementsByName("location")[0];
   for (let i = 0; i < locations.length; i++) {
@@ -55,12 +53,11 @@ function locationLoaded() {
     opt.value = locations[i].id;
     opt.innerHTML = locations[i].name;
     select_location.appendChild(opt);
-
-    if (!location_types.includes(locations[i].type)) {
-      location_types.push(locations[i].type)
-    }
   }
-  console.log(location_types)
+}
+
+function getResidents(location_id) {
+  
 }
 
 
@@ -69,7 +66,7 @@ function locationLoaded() {
 <div class="demo">
      <div>
         <h1>Locations: </h1>
-        <select name="location" size="20">
+        <select name="location" size="20", style="width: 500px; height: 500px", onchange="getResidents(this)">
 
         </select>
     </div>
