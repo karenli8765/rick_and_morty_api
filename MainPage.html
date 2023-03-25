@@ -8,13 +8,13 @@
 }
 </style>
 </head>
-<body onload="loadLocationsFunction()">
+<body onload="loadFunction()">
 
 <script>
 var locations = null;
 var characters = null;
 
-function loadLocationsFunction() {
+function loadFunction() {
   fetch('https://rickandmortyapi.com/api/location/')
   .then((response) => response.json())
   .then((json) => {
@@ -40,13 +40,14 @@ function loadLocationsFunction() {
         }
       })
     }
-  });
-  loadCharactersFunction();
+  })
 }
 
 function locationLoaded() {
   console.log("location loaded");
   console.log(locations);
+  
+  let location_types = []
 
   var select_location = document.getElementsByName("location")[0];
   for (let i = 0; i < locations.length; i++) {
@@ -54,53 +55,15 @@ function locationLoaded() {
     opt.value = locations[i].id;
     opt.innerHTML = locations[i].name;
     select_location.appendChild(opt);
-  }
-}
 
-function loadCharactersFunction() {
-  fetch("https://rickandmortyapi.com/api/character/")
-  .then((response) => response.json())
-  .then((json) => {
-    characters = new Array(json.info.count);
-    pages = json.info.pages;
-    pages_done = 1;
-    for(let i = 0; i < json.results.length; i++){
-      characters[json.results[i].id - 1] = json.results[i]
+    if (!location_types.includes(locations[i].type)) {
+      location_types.push(locations[i].type)
     }
-
-  for (let p = 1; p < pages; p++){
-    page_id = p + 1;
-    fetch("https://rickandmortyapi.com/api/character/?page=" + page_id)
-    .then((response) => response.json())
-    .then((json) => {
-      for (let i = 0; i < json.results.length; i++){
-        characters[json.results[i].id - 1] = json.results[i];
-      }
-      pages_done++;
-      if (pages_done == pages) {
-        charactersLoaded();
-      }
-    })
   }
-  })
+  console.log(location_types)
 }
 
-function charactersLoaded() {
-  console.log("characters loaded");
-  console.log("characters");
 
-  var select_character = document.getElementsByName("character")[0];
-  for (let i = 0; i < locations.length; i++) {
-    let opt = document.createElement("option");
-    opt.value = characters[i].id;
-    opt.innerHTML = characters[i].name;
-    selection_location.appendChild(opt);
-  }
-}
-
-/*
-checking to see if commits are working
-*/
 </script>
 
 <div class="demo">
