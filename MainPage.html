@@ -56,8 +56,51 @@ function locationLoaded() {
   }
 }
 
-function getResidents(location_id) {
-  
+function getResidents(location_info) {
+  location_id = location_info.options[location_info.selectedIndex].value;
+  ids = "";
+  residents = locations[location_id - 1].residents;
+  for (let i = 0; i < residents.length; i++) {
+    res = residents[i];
+    id = res.split("/")[5];
+    if (i == 0) {
+      ids = id;
+    }
+    else {
+      ids += "," + id;
+    }
+  }
+  console.log(ids)
+
+  var select_resident = document.getElementsByName("resident")[0];
+  select_resident.length = 0;
+  residents = null;
+
+  if (ids == "") {
+    return;
+  }
+
+  fetch("https://rickandmortyapi.com/api/character/"+ids)
+  .then((response) => response.json())
+  .then((json) => {
+    console.log(json);
+    if (Array.isArray(json)) {
+      residents = new Array(json.length);
+      for (let i = 0; i < json.length; i++) {
+        let opt = document.createElement("option");
+        residents[i] = json[i];
+        opt.innerHTML = json[i].name;
+        select_resident.appendChild(opt);
+      }
+    }
+    else {
+      residents = new Array(1);
+      let opt = document.createElement("option");
+      residents[0] = json;
+      opt.innerHTML = json.name;
+      select_resident.appendChild(opt);
+    }
+  })
 }
 
 
@@ -65,16 +108,14 @@ function getResidents(location_id) {
 
 <div class="demo">
      <div>
-        <h1>Locations: </h1>
+        Locations: <br>
         <select name="location" size="20", style="width: 500px; height: 500px", onchange="getResidents(this)">
 
         </select>
     </div>
     <div>
-        <span>
-          <h2>Charactors:</h2>
-        </span>
-        <select name="character" size="20">
+        Charactors: <br>
+        <select name="resident" size="20">
 
         </select>
     </div>
