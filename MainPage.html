@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.demo div {
+    float: left;
+    clear: none;
+}
+</style>
+</head>
+<body onload="loadLocationsFunction()">
+
+<script>
+var locations = null;
+var characters = null;
+
+function loadLocationsFunction() {
+  fetch('https://rickandmortyapi.com/api/location/')
+  .then((response) => response.json())
+  .then((json) => {
+    locations = new Array(json.info.count);
+    pages = json.info.pages;
+    pages_done = 1;
+    for (let i = 0; i < json.results.length; i++) {
+      locations[json.results[i].id - 1] = json.results[i];
+    }
+
+    for (let p = 1; p < pages; p++) {
+      page_id = p + 1;
+      fetch('https://rickandmortyapi.com/api/location/?page='+page_id)
+      .then((response) => response.json())
+      .then((json) => {
+        for (let i = 0; i < json.results.length; i++) {
+          locations[json.results[i].id - 1] = json.results[i];
+        }
+
+        pages_done++;
+        if (pages_done == pages) {
+          locationLoaded();
+        }
+      })
+    }
+  });
+  loadCharactersFunction();
+}
+
+function locationLoaded() {
+  console.log("location loaded");
+  console.log(locations);
+
+  var select_location = document.getElementsByName("location")[0];
+  for (let i = 0; i < locations.length; i++) {
+    let opt = document.createElement("option");
+    opt.value = locations[i].id;
+    opt.innerHTML = locations[i].name;
+    select_location.appendChild(opt);
+  }
+}
+
+function loadCharactersFunction() {
+  fetch("https://rickandmortyapi.com/api/character/")
+  .then((response) => response.json())
+  .then((json) => {
+    characters = new Array(json.info.count);
+    pages = json.info.pages;
+    pages_done = 1;
+    for(let i = 0; i < json.results.length; i++){
+      characters[json.results[i].id - 1] = json.results[i]
+    }
+
+  for (let p = 1; p < pages; p++){
+    page_id = p + 1;
+    fetch("https://rickandmortyapi.com/api/character/?page=" + page_id)
+    .then((response) => response.json())
+    .then((json) => {
+      for (let i = 0; i < json.results.length; i++){
+        characters[json.results[i].id - 1] = json.results[i];
+      }
+      pages_done++;
+      if (pages_done == pages) {
+        charactersLoaded();
+      }
+    })
+  }
+  })
+}
+
+function charactersLoaded() {
+  console.log("characters loaded");
+  console.log("characters");
+
+  var select_character = document.getElementsByName("character")[0];
+  for (let i = 0; i < locations.length; i++) {
+    let opt = document.createElement("option");
+    opt.value = characters[i].id;
+    opt.innerHTML = characters[i].name;
+    selection_location.appendChild(opt);
+  }
+}
+
+/*
+checking to see if commits are working
+*/
+</script>
+
+<div class="demo">
+     <div>
+        <h1>Locations: </h1>
+        <select name="location" size="20">
+
+        </select>
+    </div>
+    <div>
+        <span>
+          <h2>Charactors:</h2>
+        </span>
+        <select name="character" size="20">
+
+        </select>
+    </div>
+</div>
+
+
+</body>
+</html>
+
