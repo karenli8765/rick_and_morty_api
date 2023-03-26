@@ -16,6 +16,7 @@
   color: black;
   font-weight: lighter;
   padding: 5px;
+  font-size: large;
 }
 
 body {
@@ -31,7 +32,7 @@ body {
 }
 </style>
 </head>
-<body onload="loadFunction()">
+<body onload="loadFunction()"> <br>
 
 <div style = "font-size: 40px;" id="transparent_box">
   RICK AND MORTY API
@@ -144,6 +145,7 @@ function getDetail(resident_info) {
     show_detail.innerHTML = "Name: " + detail.name + "<br>";
     show_detail.innerHTML += "Status: " + detail.status + "<br>";
     show_detail.innerHTML += "<img src=" + detail.image + " onClick='openWindow("+ detail.id+")'>";
+    show_detail.innerHTML += "<br>Click image to leave a note about "+detail.name;
 }
 
 function openWindow(id) {
@@ -161,7 +163,7 @@ function openWindow(id) {
 
   </select>
   <br> <br>
-  <div id="location_type" style="background-color: lightgrey; color: black; font-weight: lighter; font-size: 20px;"> </div>
+  <div id="location_type" style="background-color: lightgrey; color: black; font-weight: lighter; font-size: large"> </div>
 </div>
 
 <br> <br>

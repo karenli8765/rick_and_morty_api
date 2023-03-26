@@ -16,6 +16,7 @@
     color: black;
     font-weight: lighter;
     padding: 5px;
+    font-size: large;
   }
   body {
     color: lime;
@@ -31,7 +32,7 @@
   
 </style>
 </head>
-<body onload="getDetail()">
+<body onload="getDetail()"> <br>
 
 <script>
 var urlSearchParams = new URLSearchParams(window.location.search);
@@ -89,10 +90,11 @@ function saveComments() {
 <br> <br>
 
 <div id="transparent_box">
-  <div id="comment" style="font-size: medium">
-    <input type="text" id="comment_box" style="width: 300px; height: 100px"> 
+  Note
+  <div id="comment" style="font-size: large">
+    <textarea type="text" id="comment_box" style="width: 350px; height: 100px">  </textarea>
     <br>
-    <button onclick="saveComments()">Save Comments</button>
+    <button onclick="saveComments()">Save</button>
   </div>
 </div>
 
