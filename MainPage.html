@@ -2,10 +2,17 @@
 <html>
 <head>
 <style>
-.demo div {
-    float: left;
-    clear: none;
-}
+  body {
+    color: lime;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+
+    background-image: url("background.jpg"); /* image source: https://wallpapersden.com/galaxy-rick-and-morty-wallpaper/2560x1600/*/
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
 </style>
 </head>
 <body onload="loadFunction()">
@@ -51,7 +58,7 @@ function locationLoaded() {
   for (let i = 0; i < locations.length; i++) {
     let opt = document.createElement("option");
     opt.value = locations[i].id;
-    opt.innerHTML = locations[i].name;
+    opt.innerHTML = "Name: " + locations[i].name + " | Type: " + locations[i].type;
     select_location.appendChild(opt);
   }
 }
@@ -103,22 +110,46 @@ function getResidents(location_info) {
   })
 }
 
+function getDetail(resident_info) {
+  show_detail = document.getElementsByName("detail")[0];
+  detail = residents[resident_info.selectedIndex];
+  show_detail.innerHTML = "Name: " + detail.name + "<br>";
+  show_detail.innerHTML += "Status: " + detail.status + "<br>";
+  show_detail.innerHTML += "<img src=" + detail.image + ">";
+}
+
+function createCommentsBox(resident_info) {
+  show_comments_box = document.getElementsByName("comment")[0]
+  var textbox = document.createElement("input");
+  textbox.setAttribute("type", "text");
+  show_comments_box.appendChild(textbox);
+}
 
 </script>
 
-<div class="demo">
-     <div>
-        Locations: <br>
-        <select name="location" size="20", style="width: 500px; height: 500px", onchange="getResidents(this)">
+<div>
+  <div>
+      Locations:<br>
+      <select name="location" size="20" style="width: 500px;" onchange="getResidents(this)">
 
-        </select>
-    </div>
-    <div>
-        Charactors: <br>
-        <select name="resident" size="20">
+      </select>
+  </div>
+  <div>
+      Charactors:<br>
+      <select name="resident" size="20" style="width: 500px;" onchange="getDetail(this)">
 
-        </select>
-    </div>
+      </select>
+  </div>
+</div>
+
+<div>
+  Character details: <br>
+  <div name="detail">
+
+  </div>
+  <div name="comment">
+
+  </div>
 </div>
 
 
