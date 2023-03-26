@@ -2,6 +2,21 @@
 <html>
 <head>
 <style>
+  #transparent_box {
+    border: 5px solid lime;
+    border-radius: 2px;
+    background-color: transparent;
+    padding: 10px;
+    display: inline-block;
+  }
+
+  #image_box {
+    
+    background-color: lightgrey;
+    color: black;
+    font-weight: lighter;
+    padding: 5px;
+  }
   body {
     color: lime;
     font-weight: bold;
@@ -17,48 +32,68 @@
 </style>
 </head>
 <body onload="getDetail()">
-      
+
 <script>
+var urlSearchParams = new URLSearchParams(window.location.search);
+var value = urlSearchParams.get("value");
+var name = ""
 
-var urlParams = new URLSearchParams(window.location.search);
-var value = parseInt(urlParams.get("value"));
-
-function getDetail(value) {
+function getDetail() {
   fetch("https://rickandmortyapi.com/api/character/"+value)
   .then((response) => response.json())
   .then((json) => {
-    console.log(json)
+    name = json.name
+    show_name = document.getElementsByName("Character_Name")[0]
+    show_name.innerHTML = name + "<br>"
     show_detail = document.getElementsByName("detail")[0];
-    show_detail.innerHTML = "Name: " + json.name + "<br>";
     show_detail.innerHTML += "Status: " + json.status + "<br>";
     show_detail.innerHTML += "<img src=" + json.image + ">";
   })
-    // show_detail = document.getElementsByName("detail")[0];
-    // detail = residents[resident_info.selectedIndex];
-    // show_detail.innerHTML = "Name: " + detail.name + "<br>";
-    // show_detail.innerHTML += "Status: " + detail.status + "<br>";
-    // show_detail.innerHTML += "<img src=" + detail.image + ">";
 }
 
 
-function createCommentsBox(resident_info) {
-    show_comments_box = document.getElementsByName("comment")[0]
-    var textbox = document.createElement("input");
-    textbox.setAttribute("type", "text");
-    show_comments_box.appendChild(textbox);
+function saveComments() {
+  user_comments = document.getElementById("comment_box").value;
+  fetch('https://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    body: JSON.stringify({
+      title: 'Comment',
+      body: user_comments,
+      userId: 1,
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+  document.getElementById("comment_box").value = " ";
+  document.getElementById("comment").innerHTML += "<br> Comment Saved"
 }
 
 
 </script>
 
-<div>
-    Character details: <br>
-    <div name="detail">
-
-    </div>
-<div name="comment">
-
+<div id="transparent_box" name="Character_Name">
+    Character <br>
 </div>
+
+<br> <br>
+
+<div id="transparent_box">
+  <div name="detail" id="image_box">
+
+  </div>
+</div>
+
+<br> <br>
+
+<div id="transparent_box">
+  <div id="comment" style="font-size: medium">
+    <input type="text" id="comment_box" style="width: 300px; height: 100px"> 
+    <br>
+    <button onclick="saveComments()">Save Comments</button>
+  </div>
 </div>
 
 </body>

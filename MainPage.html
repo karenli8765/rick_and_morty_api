@@ -2,20 +2,40 @@
 <html>
 <head>
 <style>
-  body {
-    color: lime;
-    font-weight: bold;
-    font-size: 30px;
-    text-align: center;
+#transparent_box {
+  border: 5px solid lime;
+  border-radius: 2px;
+  background-color: transparent;
+  padding: 10px;
+  display: inline-block;
+}
 
-    background-image: url("background.jpg"); /* image source: https://wallpapersden.com/galaxy-rick-and-morty-wallpaper/2560x1600/*/
-    background-size: cover;
-    background-position: center center;
-    background-attachment: fixed;
-  }
+#image_box {
+  border-radius: 4px;
+  background-color: lightgrey;
+  color: black;
+  font-weight: lighter;
+  padding: 5px;
+}
+
+body {
+  color: lime;
+  font-weight: bold;
+  font-size: 30px;
+  text-align: center;
+
+  background-image: url("background.jpg"); /* image source: https://wallpapersden.com/galaxy-rick-and-morty-wallpaper/2560x1600/*/
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+}
 </style>
 </head>
 <body onload="loadFunction()">
+
+<div style = "font-size: 40px;" id="transparent_box">
+  RICK AND MORTY API
+</div> <br> <br>
 
 <script>
 var locations = null;
@@ -58,13 +78,18 @@ function locationLoaded() {
   for (let i = 0; i < locations.length; i++) {
     let opt = document.createElement("option");
     opt.value = locations[i].id;
-    opt.innerHTML = "Name: " + locations[i].name + " | Type: " + locations[i].type;
+    opt.innerHTML = "Name: " + locations[i].name;
+    if (locations[i].residents.length == 0) {
+      opt.style.backgroundColor = "lightgray";
+    }
     select_location.appendChild(opt);
   }
 }
 
 function getResidents(location_info) {
   location_id = location_info.options[location_info.selectedIndex].value;
+  location_type = locations[location_id - 1].type;
+  document.getElementById("location_type").innerHTML = "Location Type: "+location_type;
   ids = "";
   residents = locations[location_id - 1].residents;
   for (let i = 0; i < residents.length; i++) {
@@ -97,6 +122,9 @@ function getResidents(location_info) {
         let opt = document.createElement("option");
         residents[i] = json[i];
         opt.innerHTML = json[i].name;
+        if (json[i].status == "Dead") {
+          opt.style.backgroundColor = "lightgray";
+        }
         select_resident.appendChild(opt);
       }
     }
@@ -127,28 +155,33 @@ function openWindow(id) {
 
 </script>
 
-<div>
-  <div>
-      Locations:<br>
-      <select name="location" size="20" style="width: 500px;" onchange="getResidents(this)">
+<div id="transparent_box">
+  Locations:<br>
+  <select name="location" size="20" style="width: 350px;" onchange="getResidents(this)">
 
-      </select>
-  </div>
+  </select>
+  <br> <br>
+  <div id="location_type" style="background-color: lightgrey; color: black; font-weight: lighter; font-size: 20px;"> </div>
+</div>
 
-  <div>
-      Charactors:<br>
-      <select name="resident" size="20" style="width: 500px;" onchange="getDetail(this)">
+<br> <br>
 
-      </select>
-  </div>
+<div id="transparent_box">
+  Charactors:<br>
+  <select name="resident" size="20" style="width: 350px; height: 200px" onchange="getDetail(this)">
 
-  <div>
-      Character details: <br>
-      <div name="detail">
+  </select>
+</div>
 
-      </div>
+<br> <br>
+
+<div id="transparent_box">
+  Character details: <br>
+  <div name="detail" id="image_box">
+
   </div>
 </div>
+
 
 </body>
 </html>
