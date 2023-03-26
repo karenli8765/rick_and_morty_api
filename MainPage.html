@@ -111,18 +111,18 @@ function getResidents(location_info) {
 }
 
 function getDetail(resident_info) {
-  show_detail = document.getElementsByName("detail")[0];
-  detail = residents[resident_info.selectedIndex];
-  show_detail.innerHTML = "Name: " + detail.name + "<br>";
-  show_detail.innerHTML += "Status: " + detail.status + "<br>";
-  show_detail.innerHTML += "<img src=" + detail.image + ">";
+    show_detail = document.getElementsByName("detail")[0];
+    detail = residents[resident_info.selectedIndex];
+    show_detail.innerHTML = "Name: " + detail.name + "<br>";
+    show_detail.innerHTML += "Status: " + detail.status + "<br>";
+    show_detail.innerHTML += "<img src=" + detail.image + " onClick='openWindow("+ detail.id+")'>";
 }
 
-function createCommentsBox(resident_info) {
-  show_comments_box = document.getElementsByName("comment")[0]
-  var textbox = document.createElement("input");
-  textbox.setAttribute("type", "text");
-  show_comments_box.appendChild(textbox);
+function openWindow(id) {
+  var encodedValue = encodeURIComponent(id);
+  new_webpage = "CharacterPage.html?value=" + encodedValue;
+  var newWindow = window.open();
+  newWindow.location.href = new_webpage;
 }
 
 </script>
@@ -134,24 +134,21 @@ function createCommentsBox(resident_info) {
 
       </select>
   </div>
+
   <div>
       Charactors:<br>
       <select name="resident" size="20" style="width: 500px;" onchange="getDetail(this)">
 
       </select>
   </div>
-</div>
 
-<div>
-  Character details: <br>
-  <div name="detail">
+  <div>
+      Character details: <br>
+      <div name="detail">
 
-  </div>
-  <div name="comment">
-
+      </div>
   </div>
 </div>
-
 
 </body>
 </html>

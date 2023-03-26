@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    color: lime;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+
+    background-image: url("background.jpg"); /* image source: https://wallpapersden.com/galaxy-rick-and-morty-wallpaper/2560x1600/ */
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  
+</style>
+</head>
+<body onload="getDetail()">
+      
+<script>
+
+var urlParams = new URLSearchParams(window.location.search);
+var value = parseInt(urlParams.get("value"));
+
+function getDetail(value) {
+  fetch("https://rickandmortyapi.com/api/character/"+value)
+  .then((response) => response.json())
+  .then((json) => {
+    console.log(json)
+    show_detail = document.getElementsByName("detail")[0];
+    show_detail.innerHTML = "Name: " + json.name + "<br>";
+    show_detail.innerHTML += "Status: " + json.status + "<br>";
+    show_detail.innerHTML += "<img src=" + json.image + ">";
+  })
+    // show_detail = document.getElementsByName("detail")[0];
+    // detail = residents[resident_info.selectedIndex];
+    // show_detail.innerHTML = "Name: " + detail.name + "<br>";
+    // show_detail.innerHTML += "Status: " + detail.status + "<br>";
+    // show_detail.innerHTML += "<img src=" + detail.image + ">";
+}
+
+
+function createCommentsBox(resident_info) {
+    show_comments_box = document.getElementsByName("comment")[0]
+    var textbox = document.createElement("input");
+    textbox.setAttribute("type", "text");
+    show_comments_box.appendChild(textbox);
+}
+
+
+</script>
+
+<div>
+    Character details: <br>
+    <div name="detail">
+
+    </div>
+<div name="comment">
+
+</div>
+</div>
+
+</body>
+</html>
