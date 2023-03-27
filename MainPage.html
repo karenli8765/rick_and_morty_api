@@ -12,7 +12,7 @@
 
 #image_box {
   border-radius: 4px;
-  background-color: lightgrey;
+  background-color: lightblue;
   color: black;
   font-weight: lighter;
   padding: 5px;
@@ -20,6 +20,7 @@
 }
 
 body {
+  font-family: monospace;
   color: lime;
   font-weight: bold;
   font-size: 30px;
@@ -32,39 +33,39 @@ body {
 }
 </style>
 </head>
-<body onload="loadFunction()"> <br>
+<body onload="loadFunction()"> <br> 
 
 <div style = "font-size: 40px;" id="transparent_box">
   RICK AND MORTY API
 </div> <br> <br>
 
 <script>
-var locations = null;
+var locations = null; // global variables so that once the data is queried once, it does not need to be loaded again
 var residents = null;
 
-function loadFunction() {
-  fetch('https://rickandmortyapi.com/api/location/')
+function loadFunction() { // called as soon as the page loads
+  fetch('https://rickandmortyapi.com/api/location/') // gets location information from another rick and morty api
   .then((response) => response.json())
   .then((json) => {
-    locations = new Array(json.info.count);
-    pages = json.info.pages;
+    locations = new Array(json.info.count); // sets correct size of array to total number of locations
+    pages = json.info.pages; // total # pages storing all location informations
     pages_done = 1;
-    for (let i = 0; i < json.results.length; i++) {
+    for (let i = 0; i < json.results.length; i++) { // for loop gets locations infos from page 1 and puts it in global variable locations
       locations[json.results[i].id - 1] = json.results[i];
     }
 
-    for (let p = 1; p < pages; p++) {
+    for (let p = 1; p < pages; p++) { // for loop visits all pages (except page 1) in the locations api
       page_id = p + 1;
-      fetch('https://rickandmortyapi.com/api/location/?page='+page_id)
+      fetch('https://rickandmortyapi.com/api/location/?page='+page_id) 
       .then((response) => response.json())
       .then((json) => {
-        for (let i = 0; i < json.results.length; i++) {
+        for (let i = 0; i < json.results.length; i++) { // for loop gets locations infos from remaining pages and puts it in global variable locations
           locations[json.results[i].id - 1] = json.results[i];
         }
 
         pages_done++;
         if (pages_done == pages) {
-          locationLoaded();
+          locationLoaded(); // once variable locations is ready to go, create the list of options
         }
       })
     }
@@ -75,25 +76,27 @@ function locationLoaded() {
   console.log("location loaded");
   console.log(locations);
 
-  var select_location = document.getElementsByName("location")[0];
-  for (let i = 0; i < locations.length; i++) {
+  var select_location = document.getElementsByName("location")[0]; 
+  for (let i = 0; i < locations.length; i++) { // for loop enters all location names as an option on webpage
     let opt = document.createElement("option");
-    opt.value = locations[i].id;
-    opt.innerHTML = "Name: " + locations[i].name;
-    if (locations[i].residents.length == 0) {
+    opt.value = locations[i].id; // associates location id with the location name's option
+    opt.innerHTML = "Name: " + locations[i].name; 
+    if (locations[i].residents.length == 0) { // greys out any empty location
       opt.style.backgroundColor = "lightgray";
     }
-    select_location.appendChild(opt);
+    select_location.appendChild(opt); 
   }
 }
 
-function getResidents(location_info) {
+function getResidents(location_info) { // gets all residents of a location
   location_id = location_info.options[location_info.selectedIndex].value;
   location_type = locations[location_id - 1].type;
-  document.getElementById("location_type").innerHTML = "Location Type: "+location_type;
+  location_name = locations[location_id - 1].name;
+  document.getElementById("location_type").innerHTML = "Name: " + location_name + "<br>Type: " + location_type; // location type information display
+  
   ids = "";
-  residents = locations[location_id - 1].residents;
-  for (let i = 0; i < residents.length; i++) {
+  residents = locations[location_id - 1].residents; // gets all residents of the selected location
+  for (let i = 0; i < residents.length; i++) { // adds all resident ids into a string 
     res = residents[i];
     id = res.split("/")[5];
     if (i == 0) {
@@ -113,11 +116,11 @@ function getResidents(location_info) {
     return;
   }
 
-  fetch("https://rickandmortyapi.com/api/character/"+ids)
+  fetch("https://rickandmortyapi.com/api/character/"+ids) // calls for all resident character informations with id string
   .then((response) => response.json())
   .then((json) => {
     console.log(json);
-    if (Array.isArray(json)) {
+    if (Array.isArray(json)) { // if there is more than one resident at the location
       residents = new Array(json.length);
       for (let i = 0; i < json.length; i++) {
         let opt = document.createElement("option");
@@ -129,7 +132,7 @@ function getResidents(location_info) {
         select_resident.appendChild(opt);
       }
     }
-    else {
+    else { // if there is only one resident at the location
       residents = new Array(1);
       let opt = document.createElement("option");
       residents[0] = json;
@@ -139,17 +142,17 @@ function getResidents(location_info) {
   })
 }
 
-function getDetail(resident_info) {
+function getDetail(resident_info) { // gets and displays some details about the selected character
     show_detail = document.getElementsByName("detail")[0];
     detail = residents[resident_info.selectedIndex];
     show_detail.innerHTML = "Name: " + detail.name + "<br>";
     show_detail.innerHTML += "Status: " + detail.status + "<br>";
     show_detail.innerHTML += "<img src=" + detail.image + " onClick='openWindow("+ detail.id+")'>";
-    show_detail.innerHTML += "<br>Click image to leave a note about "+detail.name;
+    show_detail.innerHTML += "<br>Click image to learn more about "+detail.name;
 }
 
-function openWindow(id) {
-  var encodedValue = encodeURIComponent(id);
+function openWindow(id) { // opens new window when user clicks on the image
+  var encodedValue = encodeURIComponent(id); // send the character id to the new webpage
   new_webpage = "CharacterPage.html?value=" + encodedValue;
   var newWindow = window.open();
   newWindow.location.href = new_webpage;

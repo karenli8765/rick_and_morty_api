@@ -11,14 +11,14 @@
   }
 
   #image_box {
-    
-    background-color: lightgrey;
+    background-color: lightcyan;
     color: black;
     font-weight: lighter;
     padding: 5px;
     font-size: large;
   }
   body {
+    font-family: monospace;
     color: lime;
     font-weight: bold;
     font-size: 30px;
@@ -39,8 +39,8 @@ var urlSearchParams = new URLSearchParams(window.location.search);
 var value = urlSearchParams.get("value");
 var name = ""
 
-function getDetail() {
-  fetch("https://rickandmortyapi.com/api/character/"+value)
+function getDetail() { // when the pages opens, immediately load all relevant character details
+  fetch("https://rickandmortyapi.com/api/character/"+value) // gets character info from api
   .then((response) => response.json())
   .then((json) => {
     name = json.name
@@ -48,14 +48,23 @@ function getDetail() {
     show_name.innerHTML = name + "<br>"
     show_detail = document.getElementsByName("detail")[0];
     show_detail.innerHTML += "Status: " + json.status + "<br>";
+    show_detail.innerHTML += "Gender: " + json.gender + "<br>";
+    show_detail.innerHTML += "Species: " + json.species + "<br>";
+    if (json.type == "") { // if character type is None
+      show_detail.innerHTML += "Type: None <br>";
+    }
+    else { // if character has a type
+      show_detail.innerHTML += "Type: " + json.type + "<br>";
+    }
+    show_detail.innerHTML += "Origin: " + json.origin.name + "<br>";
     show_detail.innerHTML += "<img src=" + json.image + ">";
   })
 }
 
 
 function saveComments() {
-  user_comments = document.getElementById("comment_box").value;
-  fetch('https://jsonplaceholder.typicode.com/posts', {
+  user_comments = document.getElementById("comment_box").value; // stores user notes in variable
+  fetch('https://jsonplaceholder.typicode.com/posts', { // send note to dummy endpoint
     method: 'POST',
     body: JSON.stringify({
       title: 'Comment',
@@ -68,10 +77,13 @@ function saveComments() {
   })
   .then((response) => response.json())
   .then((json) => console.log(json));
-  document.getElementById("comment_box").value = " ";
-  document.getElementById("comment").innerHTML += "<br> Comment Saved"
-}
+  document.getElementById("comment_box").value = " "; // clears comment box 
+  document.getElementById("note_saved").style.display = "block"; // puts saved confirmation on screen
 
+  setTimeout(function() {  
+    document.getElementById("note_saved").style.display = "none"; // Hide the saved confirmation after 2 seconds
+  }, 2000);
+}
 
 </script>
 
@@ -91,12 +103,18 @@ function saveComments() {
 
 <div id="transparent_box">
   Note
-  <div id="comment" style="font-size: large">
+  <div id="comment">
     <textarea type="text" id="comment_box" style="width: 350px; height: 100px">  </textarea>
     <br>
-    <button onclick="saveComments()">Save</button>
+  </div>
+  <button onclick="saveComments()">Save</button>
+  <div id="note_saved" style="display: none; font-size: large; font-weight: lighter;"> 
+    Note Saved 
   </div>
 </div>
+<br>
+
+  
 
 </body>
 </html>
