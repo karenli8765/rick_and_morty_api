@@ -11,7 +11,7 @@ Regardless of whether the character is alive or dead, when a character is select
 
 ![](mainpagept3.png)
 
-If the user clicks the image, a new page will open with more details about the character: gender, species, type, and origin. Under the details will be a text box where the user can enter notes about this character. After clicking submit, the user will see a confirmation that their note is sent and the confirmation will diaappear after 2 seconds.
+If the user clicks the image, a new page will open with more details about the character: gender, species, type, and origin. Under the details will be a text box where the user can enter notes about this character. After clicking submit, the user will see a confirmation that their note is sent and the confirmation will disappear after 2 seconds.
 
 ![](characterpagess.png)
 
